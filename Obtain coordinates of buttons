@@ -1,0 +1,249 @@
+/* Get coordinates of buttons to generate the ideal paths for swiping
+        let us_base_view = &views
+            .get(&("us".to_string(), "base".to_string()))
+            .unwrap()
+            .key_coordinates;
+        for (coordinates, button) in us_base_view {
+            let id = button.get_id();
+            println!("id: {:?}", id);
+            println!("coordinate: {:?}", coordinates);
+            println!();
+        }
+*/
+
+
+
+id: "."
+coordinate: (775, 875)
+
+id: "GBA"
+coordinate: (125, 875)
+
+id: "g"
+coordinate: (525, 375)
+
+id: "o"
+coordinate: (825, 125)
+
+id: "r"
+coordinate: (375, 125)
+
+id: "l"
+coordinate: (925, 375)
+
+id: "d"
+coordinate: (325, 375)
+
+id: "k"
+coordinate: (825, 375)
+
+id: "q"
+coordinate: (75, 125)
+
+id: "Shift_L_base"
+coordinate: (25, 625)
+
+id: ":)"
+coordinate: (275, 875)
+
+id: "space"
+coordinate: (525, 875)
+
+id: "i"
+coordinate: (775, 125)
+
+id: "k"
+coordinate: (775, 375)
+
+id: "BackSpace"
+coordinate: (975, 625)
+
+id: "BackSpace"
+coordinate: (875, 625)
+
+id: "b"
+coordinate: (575, 625)
+
+id: "Return"
+coordinate: (825, 875)
+
+id: "space"
+coordinate: (475, 875)
+
+id: "space"
+coordinate: (375, 875)
+
+id: "t"
+coordinate: (425, 125)
+
+id: "w"
+coordinate: (175, 125)
+
+id: "v"
+coordinate: (425, 625)
+
+id: "j"
+coordinate: (725, 375)
+
+id: "i"
+coordinate: (725, 125)
+
+id: "y"
+coordinate: (575, 125)
+
+id: "j"
+coordinate: (675, 375)
+
+id: "f"
+coordinate: (375, 375)
+
+id: "n"
+coordinate: (625, 625)
+
+id: "space"
+coordinate: (575, 875)
+
+id: "show_numbers"
+coordinate: (75, 875)
+
+id: "z"
+coordinate: (125, 625)
+
+id: "w"
+coordinate: (125, 125)
+
+id: "Shift_L_base"
+coordinate: (75, 625)
+
+id: "."
+coordinate: (725, 875)
+
+id: "space"
+coordinate: (325, 875)
+
+id: "s"
+coordinate: (175, 375)
+
+id: "q"
+coordinate: (25, 125)
+
+id: "g"
+coordinate: (475, 375)
+
+id: "u"
+coordinate: (625, 125)
+
+id: "c"
+coordinate: (375, 625)
+
+id: "x"
+coordinate: (275, 625)
+
+id: "space"
+coordinate: (425, 875)
+
+id: "n"
+coordinate: (675, 625)
+
+id: "BackSpace"
+coordinate: (925, 625)
+
+id: "o"
+coordinate: (875, 125)
+
+id: "d"
+coordinate: (275, 375)
+
+id: "GBA"
+coordinate: (175, 875)
+
+id: "y"
+coordinate: (525, 125)
+
+id: "Return"
+coordinate: (875, 875)
+
+id: "h"
+coordinate: (625, 375)
+
+id: "a"
+coordinate: (125, 375)
+
+id: "p"
+coordinate: (925, 125)
+
+id: "l"
+coordinate: (875, 375)
+
+id: "t"
+coordinate: (475, 125)
+
+id: "space"
+coordinate: (625, 875)
+
+id: "BackSpace"
+coordinate: (825, 625)
+
+id: "Return"
+coordinate: (975, 875)
+
+id: "z"
+coordinate: (175, 625)
+
+id: "show_numbers"
+coordinate: (25, 875)
+
+id: "c"
+coordinate: (325, 625)
+
+id: "a"
+coordinate: (75, 375)
+
+id: "e"
+coordinate: (225, 125)
+
+id: "b"
+coordinate: (525, 625)
+
+id: "space"
+coordinate: (675, 875)
+
+id: "u"
+coordinate: (675, 125)
+
+id: "x"
+coordinate: (225, 625)
+
+id: "p"
+coordinate: (975, 125)
+
+id: "e"
+coordinate: (275, 125)
+
+id: "h"
+coordinate: (575, 375)
+
+id: "m"
+coordinate: (725, 625)
+
+id: "m"
+coordinate: (775, 625)
+
+id: "f"
+coordinate: (425, 375)
+
+id: "s"
+coordinate: (225, 375)
+
+id: ":)"
+coordinate: (225, 875)
+
+id: "Return"
+coordinate: (925, 875)
+
+id: "v"
+coordinate: (475, 625)
+
+id: "r"
+coordinate: (325, 125)
+
