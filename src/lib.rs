@@ -1,13 +1,12 @@
 use std::collections::HashMap;
 use std::vec::Vec;
 
-pub fn get_path(word: &str, no_points: usize) -> Vec<(f64, f64)> {
-    println!("Original word '{}':", word);
-
+pub fn get_path(word: &str) -> Vec<(f64, f64)> {
     // Remove duplicate chars
     let mut word: Vec<char> = word.chars().collect();
     word.dedup();
-    let word: String = word.into_iter().collect();
+    // Ignore the case
+    let word: String = word.into_iter().collect::<String>().to_ascii_lowercase();
 
     // Get button centers
     let button_coordinates = get_default_buttons_centers();
@@ -15,7 +14,7 @@ pub fn get_path(word: &str, no_points: usize) -> Vec<(f64, f64)> {
     // Get waypoints
     let ideal_path = ideal_waypoints(&word, button_coordinates);
     // Interpolate the path
-    ideal_path_interpolated(no_points, ideal_path)
+    ideal_path_interpolated(ideal_path)
 }
 
 // Generates a path by connecting the centers of the keys of the word with straight lines. Only the waypoints are returned, nothing is interpolated
@@ -25,8 +24,12 @@ pub fn ideal_waypoints(
 ) -> Vec<(f64, f64)> {
     let mut points = Vec::new();
     for letter in word.chars() {
-        let letter_coordinate = button_coordinates.get(&letter.to_string()).unwrap();
-        points.push(*letter_coordinate);
+        let letter_coordinate = button_coordinates.get(&letter.to_string());
+        if let Some(letter_coordinate) = letter_coordinate {
+            points.push(*letter_coordinate);
+        } else {
+            println!("No key found for letter {}, IGNORED", letter);
+        }
     }
     points
 }
@@ -34,13 +37,17 @@ fn dist(start: &(f64, f64), end: &(f64, f64)) -> f64 {
     f64::sqrt((start.0 - end.0).powi(2) + (start.1 - end.1).powi(2))
 }
 
-pub fn ideal_path_interpolated(no_points: usize, waypoints: Vec<(f64, f64)>) -> Vec<(f64, f64)> {
-    if no_points < waypoints.len() {
-        panic!("There are more waypoints than no_points!");
+pub fn ideal_path_interpolated(waypoints: Vec<(f64, f64)>) -> Vec<(f64, f64)> {
+    let resolution = 30.0;
+    if waypoints.is_empty() {
+        println!("There must at least be one waypoint");
     }
 
     let mut path: Vec<(f64, f64)> = Vec::new();
     let mut total_dist = 0.0;
+
+    // Add the first waypoint
+    path.push(waypoints[0]);
 
     // Calculate the total distance of the path
     let mut waypoints_iter = waypoints.iter().peekable();
@@ -50,7 +57,9 @@ pub fn ideal_path_interpolated(no_points: usize, waypoints: Vec<(f64, f64)>) -> 
         }
     }
     if (total_dist - 0.0).abs() < 0.00000001 {
-        panic!("The waypoints must not be the same");
+        println!("The waypoints are all the same!");
+        println!("Replaced them with just the first point");
+        return path;
     }
 
     // Interpolate the points of the path
@@ -59,9 +68,6 @@ pub fn ideal_path_interpolated(no_points: usize, waypoints: Vec<(f64, f64)>) -> 
     let mut delta_y;
 
     let mut waypoints_iter = waypoints.iter().peekable();
-
-    // Add the first waypoint
-    path.push(waypoints[0]);
 
     // While there are more waypoints, interpolate points for them
     while let Some(start_point) = waypoints_iter.next() {
@@ -73,7 +79,7 @@ pub fn ideal_path_interpolated(no_points: usize, waypoints: Vec<(f64, f64)>) -> 
                 continue;
             }
             leg_dist = dist(start_point, end_point);
-            let no_leg_points = (leg_dist / total_dist) * no_points as f64;
+            let no_leg_points = leg_dist * resolution;
             let no_leg_points = no_leg_points.trunc();
 
             for i in 0..no_leg_points as isize {

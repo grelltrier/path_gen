@@ -1,6 +1,6 @@
 fn main() {
     let word = "top";
-    let ideal_path = path_gen::get_path(word, 100);
+    let ideal_path = path_gen::get_path(word);
 
     // Print the path for debugging
     println!("Path for '{}':", word);
