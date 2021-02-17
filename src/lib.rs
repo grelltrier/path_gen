@@ -53,10 +53,10 @@ impl<'a> WordPath<'a> {
         for letter in &self.word {
             let letter_coordinate = self.key_layout.get(&letter.to_string());
             if let Some(letter_coordinate) = letter_coordinate {
-                println!("letter {}, coordinate {:?}", letter, letter_coordinate);
+                //println!("letter {}, coordinate {:?}", letter, letter_coordinate);
                 points.push(*letter_coordinate);
             } else {
-                println!("No key found for letter {}, NO PATH POSSIBLE", letter);
+                //println!("No key found for letter {}, NO PATH POSSIBLE", letter);
                 return None;
             }
         }
@@ -65,7 +65,7 @@ impl<'a> WordPath<'a> {
 
     pub fn ideal_path_interpolated(&self, waypoints: Vec<(f64, f64)>) -> Option<Vec<(f64, f64)>> {
         if waypoints.is_empty() {
-            println!("There must at least be one waypoint");
+            //println!("There must at least be one waypoint");
             return None;
         }
 
@@ -106,7 +106,7 @@ impl<'a> WordPath<'a> {
                 let no_leg_points = leg_dist * RESOLUTION;
                 let no_leg_points = no_leg_points.trunc();
 
-                println!("No of leg_points: {}", no_leg_points);
+                // println!("No of leg_points: {}", no_leg_points);
 
                 // Calculate the delta and divide it by the number of points
                 // This can also be interpreted as the slope of the linear function connecting the start and the end point
