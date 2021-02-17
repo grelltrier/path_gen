@@ -1,6 +1,10 @@
+use path_gen::{get_default_buttons_centers, WordPath};
+
 fn main() {
     let word = "top";
-    let ideal_path = path_gen::get_path(word);
+    let key_layout = get_default_buttons_centers();
+    let word_path = WordPath::new(&key_layout, word);
+    let ideal_path = word_path.get_path();
 
     // Print the path for debugging
     println!("Path for '{}':", word);

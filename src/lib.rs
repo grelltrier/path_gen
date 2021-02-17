@@ -1,98 +1,122 @@
 use std::collections::HashMap;
 use std::vec::Vec;
 
-pub fn get_path(word: &str) -> Vec<(f64, f64)> {
-    // Remove duplicate chars
-    let mut word: Vec<char> = word.chars().collect();
-    word.dedup();
-    // Ignore the case
-    let word: String = word.into_iter().collect::<String>().to_ascii_lowercase();
+const RESOLUTION: f64 = 30.0;
 
-    // Get button centers
-    let button_coordinates = get_default_buttons_centers();
-
-    // Get waypoints
-    let ideal_path = ideal_waypoints(&word, button_coordinates);
-    // Interpolate the path
-    ideal_path_interpolated(ideal_path)
+pub struct WordPath<'a> {
+    word: Vec<char>,
+    key_layout: &'a HashMap<String, (f64, f64)>,
 }
 
-// Generates a path by connecting the centers of the keys of the word with straight lines. Only the waypoints are returned, nothing is interpolated
-pub fn ideal_waypoints(
-    word: &str,
-    button_coordinates: HashMap<String, (f64, f64)>,
-) -> Vec<(f64, f64)> {
-    let mut points = Vec::new();
-    for letter in word.chars() {
-        let letter_coordinate = button_coordinates.get(&letter.to_string());
-        if let Some(letter_coordinate) = letter_coordinate {
-            points.push(*letter_coordinate);
-        } else {
-            println!("No key found for letter {}, IGNORED", letter);
-        }
+impl<'a> WordPath<'a> {
+    pub fn new(key_layout: &'a HashMap<String, (f64, f64)>, word: &str) -> Self {
+        let mut word: Vec<char> = word.chars().collect();
+        word.dedup();
+        // Ignore the case
+        let word: String = word.into_iter().collect::<String>().to_ascii_lowercase();
+        let word: Vec<char> = word.chars().collect();
+        Self { word, key_layout }
     }
-    points
+
+    pub fn get_first_last_points(&self) -> (Option<&(f64, f64)>, Option<&(f64, f64)>) {
+        let coordinate_first_key = if self.word.len() > 0 {
+            let first_char = self.word[0];
+            self.key_layout.get(&first_char.to_string())
+        } else {
+            None
+        };
+
+        let coordinate_last_key = if self.word.len() > 1 {
+            let last_char = self.word[self.word.len() - 1];
+            self.key_layout.get(&last_char.to_string())
+        } else {
+            None
+        };
+
+        (coordinate_first_key, coordinate_last_key)
+    }
+
+    pub fn get_path(&self) -> Vec<(f64, f64)> {
+        // Get waypoints
+        let ideal_path = self.ideal_waypoints();
+        // Interpolate the path
+        self.ideal_path_interpolated(ideal_path)
+    }
+
+    // Generates a path by connecting the centers of the keys of the word with straight lines. Only the waypoints are returned, nothing is interpolated
+    pub fn ideal_waypoints(&self) -> Vec<(f64, f64)> {
+        let mut points = Vec::new();
+        for letter in &self.word {
+            let letter_coordinate = self.key_layout.get(&letter.to_string());
+            if let Some(letter_coordinate) = letter_coordinate {
+                points.push(*letter_coordinate);
+            } else {
+                println!("No key found for letter {}, IGNORED", letter);
+            }
+        }
+        points
+    }
+
+    pub fn ideal_path_interpolated(&self, waypoints: Vec<(f64, f64)>) -> Vec<(f64, f64)> {
+        if waypoints.is_empty() {
+            println!("There must at least be one waypoint");
+        }
+
+        let mut path: Vec<(f64, f64)> = Vec::new();
+        let mut total_dist = 0.0;
+
+        // Add the first waypoint
+        path.push(waypoints[0]);
+
+        // Calculate the total distance of the path
+        let mut waypoints_iter = waypoints.iter().peekable();
+        while let Some(start_point) = waypoints_iter.next() {
+            if let Some(end_point) = waypoints_iter.peek() {
+                total_dist += dist(start_point, *end_point);
+            }
+        }
+        if (total_dist - 0.0).abs() < 0.00000001 {
+            println!("The waypoints are all the same!");
+            println!("Replaced them with just the first point");
+            return path;
+        }
+
+        // Interpolate the points of the path
+        let mut leg_dist;
+        let mut delta_x;
+        let mut delta_y;
+
+        let mut waypoints_iter = waypoints.iter().peekable();
+
+        // While there are more waypoints, interpolate points for them
+        while let Some(start_point) = waypoints_iter.next() {
+            if let Some(end_point) = waypoints_iter.peek() {
+                delta_x = end_point.0 - start_point.0;
+                delta_y = end_point.1 - start_point.1;
+                // Skip legs when their start end end points are equal
+                if (delta_x).abs() < 0.00000001 && (delta_y).abs() < 0.00000001 {
+                    continue;
+                }
+                leg_dist = dist(start_point, end_point);
+                let no_leg_points = leg_dist * RESOLUTION;
+                let no_leg_points = no_leg_points.trunc();
+
+                for i in 0..no_leg_points as isize {
+                    path.push((
+                        delta_x * (i as f64 / no_leg_points) + start_point.0,
+                        delta_y * (i as f64 / no_leg_points) + start_point.1,
+                    ));
+                }
+                path.push(**end_point);
+            }
+        }
+
+        path
+    }
 }
+
 fn dist(start: &(f64, f64), end: &(f64, f64)) -> f64 {
     f64::sqrt((start.0 - end.0).powi(2) + (start.1 - end.1).powi(2))
-}
-
-pub fn ideal_path_interpolated(waypoints: Vec<(f64, f64)>) -> Vec<(f64, f64)> {
-    let resolution = 30.0;
-    if waypoints.is_empty() {
-        println!("There must at least be one waypoint");
-    }
-
-    let mut path: Vec<(f64, f64)> = Vec::new();
-    let mut total_dist = 0.0;
-
-    // Add the first waypoint
-    path.push(waypoints[0]);
-
-    // Calculate the total distance of the path
-    let mut waypoints_iter = waypoints.iter().peekable();
-    while let Some(start_point) = waypoints_iter.next() {
-        if let Some(end_point) = waypoints_iter.peek() {
-            total_dist += dist(start_point, *end_point);
-        }
-    }
-    if (total_dist - 0.0).abs() < 0.00000001 {
-        println!("The waypoints are all the same!");
-        println!("Replaced them with just the first point");
-        return path;
-    }
-
-    // Interpolate the points of the path
-    let mut leg_dist;
-    let mut delta_x;
-    let mut delta_y;
-
-    let mut waypoints_iter = waypoints.iter().peekable();
-
-    // While there are more waypoints, interpolate points for them
-    while let Some(start_point) = waypoints_iter.next() {
-        if let Some(end_point) = waypoints_iter.peek() {
-            delta_x = end_point.0 - start_point.0;
-            delta_y = end_point.1 - start_point.1;
-            // Skip legs when their start end end points are equal
-            if (delta_x).abs() < 0.00000001 && (delta_y).abs() < 0.00000001 {
-                continue;
-            }
-            leg_dist = dist(start_point, end_point);
-            let no_leg_points = leg_dist * resolution;
-            let no_leg_points = no_leg_points.trunc();
-
-            for i in 0..no_leg_points as isize {
-                path.push((
-                    delta_x * (i as f64 / no_leg_points) + start_point.0,
-                    delta_y * (i as f64 / no_leg_points) + start_point.1,
-                ));
-            }
-            path.push(**end_point);
-        }
-    }
-
-    path
 }
 
 // Gets the centers of all default buttons
