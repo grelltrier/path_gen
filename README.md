@@ -1,4 +1,5 @@
 [![dependency status](https://deps.rs/repo/github/grelltrier/path_gen/status.svg)](https://deps.rs/repo/github/grelltrier/path_gen)
+![Build](https://github.com/grelltrier/path_gen/workflows/Build/badge.svg)
 
 # Path_gen
 
