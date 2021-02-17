@@ -36,30 +36,37 @@ impl<'a> WordPath<'a> {
         (coordinate_first_key, coordinate_last_key)
     }
 
-    pub fn get_path(&self) -> Vec<(f64, f64)> {
+    pub fn get_path(&self) -> Option<Vec<(f64, f64)>> {
         // Get waypoints
         let ideal_path = self.ideal_waypoints();
         // Interpolate the path
-        self.ideal_path_interpolated(ideal_path)
+        if let Some(ideal_path) = ideal_path {
+            self.ideal_path_interpolated(ideal_path)
+        } else {
+            None
+        }
     }
 
     // Generates a path by connecting the centers of the keys of the word with straight lines. Only the waypoints are returned, nothing is interpolated
-    pub fn ideal_waypoints(&self) -> Vec<(f64, f64)> {
+    pub fn ideal_waypoints(&self) -> Option<Vec<(f64, f64)>> {
         let mut points = Vec::new();
         for letter in &self.word {
             let letter_coordinate = self.key_layout.get(&letter.to_string());
             if let Some(letter_coordinate) = letter_coordinate {
+                println!("letter {}, coordinate {:?}", letter, letter_coordinate);
                 points.push(*letter_coordinate);
             } else {
-                println!("No key found for letter {}, IGNORED", letter);
+                println!("No key found for letter {}, NO PATH POSSIBLE", letter);
+                return None;
             }
         }
-        points
+        Some(points)
     }
 
-    pub fn ideal_path_interpolated(&self, waypoints: Vec<(f64, f64)>) -> Vec<(f64, f64)> {
+    pub fn ideal_path_interpolated(&self, waypoints: Vec<(f64, f64)>) -> Option<Vec<(f64, f64)>> {
         if waypoints.is_empty() {
             println!("There must at least be one waypoint");
+            return None;
         }
 
         let mut path: Vec<(f64, f64)> = Vec::new();
@@ -71,14 +78,14 @@ impl<'a> WordPath<'a> {
         // Calculate the total distance of the path
         let mut waypoints_iter = waypoints.iter().peekable();
         while let Some(start_point) = waypoints_iter.next() {
-            if let Some(end_point) = waypoints_iter.peek() {
-                total_dist += dist(start_point, *end_point);
+            if let Some(&end_point) = waypoints_iter.peek() {
+                total_dist += dist(start_point, end_point);
             }
         }
         if (total_dist - 0.0).abs() < 0.00000001 {
             println!("The waypoints are all the same!");
             println!("Replaced them with just the first point");
-            return path;
+            return Some(path);
         }
 
         // Interpolate the points of the path
@@ -90,28 +97,32 @@ impl<'a> WordPath<'a> {
 
         // While there are more waypoints, interpolate points for them
         while let Some(start_point) = waypoints_iter.next() {
-            if let Some(end_point) = waypoints_iter.peek() {
-                delta_x = end_point.0 - start_point.0;
-                delta_y = end_point.1 - start_point.1;
-                // Skip legs when their start end end points are equal
-                if (delta_x).abs() < 0.00000001 && (delta_y).abs() < 0.00000001 {
+            if let Some(&end_point) = waypoints_iter.peek() {
+                leg_dist = dist(start_point, end_point);
+                // Skip legs when their start and end points are equal
+                if leg_dist < 0.00000001 {
                     continue;
                 }
-                leg_dist = dist(start_point, end_point);
                 let no_leg_points = leg_dist * RESOLUTION;
                 let no_leg_points = no_leg_points.trunc();
 
-                for i in 0..no_leg_points as isize {
+                println!("No of leg_points: {}", no_leg_points);
+
+                // Calculate the delta and divide it by the number of points
+                // This can also be interpreted as the slope of the linear function connecting the start and the end point
+                delta_x = (end_point.0 - start_point.0) / no_leg_points;
+                delta_y = (end_point.1 - start_point.1) / no_leg_points;
+                for i in 1..no_leg_points as isize {
                     path.push((
-                        delta_x * (i as f64 / no_leg_points) + start_point.0,
-                        delta_y * (i as f64 / no_leg_points) + start_point.1,
+                        delta_x * i as f64 + start_point.0,
+                        delta_y * i as f64 + start_point.1,
                     ));
                 }
-                path.push(**end_point);
+                path.push(*end_point);
             }
         }
 
-        path
+        Some(path)
     }
 }
 
