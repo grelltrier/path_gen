@@ -1,7 +1,7 @@
 use path_gen::{get_default_buttons_centers, WordPath};
 
 fn main() {
-    let word = "doing";
+    /*let word = "doing";
     let key_layout = get_default_buttons_centers();
     let word_path = WordPath::new(&key_layout, word);
     let ideal_path = word_path.get_path();
@@ -14,5 +14,7 @@ fn main() {
         }
     } else {
         println!("There is no valid path possible");
-    }
+    } */
+
+    path_gen::get_button_centers();
 }

@@ -131,7 +131,7 @@ fn dist(start: &(f64, f64), end: &(f64, f64)) -> f64 {
 }
 
 // Gets the centers of all default buttons
-pub fn get_default_buttons_centers() -> HashMap<String, (f64, f64)> {
+/*pub fn get_default_buttons_centers() -> HashMap<String, (f64, f64)> {
     let mut buttons = HashMap::new();
     buttons.insert("u".to_string(), (0.65, 0.125));
     buttons.insert("i".to_string(), (0.75, 0.125));
@@ -168,4 +168,186 @@ pub fn get_default_buttons_centers() -> HashMap<String, (f64, f64)> {
     buttons.insert("f".to_string(), (0.4, 0.375));
     buttons.insert("j".to_string(), (0.7, 0.375));
     buttons
+}*/
+
+pub fn get_default_buttons_centers() -> HashMap<String, (f64, f64)> {
+    let mut buttons = HashMap::new();
+    buttons.insert("h".to_string(), (0.600, 0.075));
+    buttons.insert("p".to_string(), (0.950, 0.025));
+    buttons.insert("q".to_string(), (0.050, 0.025));
+    buttons.insert("d".to_string(), (0.300, 0.075));
+    buttons.insert("x".to_string(), (0.250, 0.125));
+    buttons.insert("s".to_string(), (0.200, 0.075));
+    buttons.insert("y".to_string(), (0.550, 0.025));
+    buttons.insert("i".to_string(), (0.750, 0.025));
+    buttons.insert("j".to_string(), (0.700, 0.075));
+    buttons.insert("w".to_string(), (0.150, 0.025));
+    buttons.insert("e".to_string(), (0.250, 0.025));
+    buttons.insert("c".to_string(), (0.350, 0.125));
+    buttons.insert("m".to_string(), (0.750, 0.125));
+    buttons.insert("k".to_string(), (0.800, 0.075));
+    buttons.insert("a".to_string(), (0.100, 0.075));
+    buttons.insert("o".to_string(), (0.850, 0.025));
+    buttons.insert("t".to_string(), (0.450, 0.025));
+    buttons.insert("z".to_string(), (0.150, 0.125));
+    buttons.insert("b".to_string(), (0.550, 0.125));
+    buttons.insert("g".to_string(), (0.500, 0.075));
+    buttons.insert("r".to_string(), (0.350, 0.025));
+    buttons.insert("l".to_string(), (0.900, 0.075));
+    buttons.insert("f".to_string(), (0.400, 0.075));
+    buttons.insert("n".to_string(), (0.650, 0.125));
+    buttons.insert("v".to_string(), (0.450, 0.125));
+    buttons.insert("u".to_string(), (0.650, 0.025));
+
+    buttons
+}
+
+pub fn get_button_centers() -> HashMap<std::string::String, (f64, f64)> {
+    let buttons_raw = get_buttons();
+    // Get sum up the coordinates of the buttons
+    let mut buttons_coordinates = HashMap::new();
+    for (button_id, x, y) in buttons_raw.into_iter() {
+        let button_entry = buttons_coordinates
+            .entry(button_id)
+            .or_insert((0.0, 0.0, 0));
+        let (button_x, button_y, button_count) = button_entry;
+        *button_x += x;
+        *button_y += y;
+        *button_count += 1;
+    }
+
+    // Divide the coordinates by the number of occurences of the buttons to get their center.
+    let mut buttons_coordinates_normalized = HashMap::new();
+    for (button_id, (button_x, button_y, button_count)) in buttons_coordinates.into_iter() {
+        let button_x = button_x / button_count as f64;
+        let button_y = button_y / button_count as f64;
+        buttons_coordinates_normalized.insert(button_id.to_string(), (button_x, button_y));
+    }
+    for (button_name, (x, y)) in buttons_coordinates_normalized.iter() {
+        //buttons.push((".".to_string(), 0.775, 0.875));
+        println!(
+            "buttons.push((\"{}\".to_string(), {:.3}, {:.3}));",
+            button_name, x, y,
+        );
+    }
+
+    buttons_coordinates_normalized
+}
+
+fn get_buttons() -> Vec<(String, f64, f64)> {
+    vec![
+        ("m".to_string(), 0.7250000000000001, 0.125),
+        ("m".to_string(), 0.775, 0.125),
+        ("f".to_string(), 0.37500000000000006, 0.07500000000000001),
+        ("f".to_string(), 0.42500000000000004, 0.07500000000000001),
+        ("d".to_string(), 0.275, 0.07500000000000001),
+        ("d".to_string(), 0.32500000000000007, 0.07500000000000001),
+        ("v".to_string(), 0.42500000000000004, 0.125),
+        ("v".to_string(), 0.47500000000000003, 0.125),
+        ("h".to_string(), 0.5750000000000001, 0.07500000000000001),
+        ("h".to_string(), 0.6250000000000001, 0.07500000000000001),
+        ("w".to_string(), 0.125, 0.025),
+        ("w".to_string(), 0.17500000000000002, 0.025),
+        ("i".to_string(), 0.7250000000000001, 0.025),
+        ("i".to_string(), 0.775, 0.025),
+        ("y".to_string(), 0.525, 0.025),
+        ("y".to_string(), 0.5750000000000001, 0.025),
+        ("c".to_string(), 0.32500000000000007, 0.125),
+        ("c".to_string(), 0.37500000000000006, 0.125),
+        ("u".to_string(), 0.6250000000000001, 0.025),
+        ("u".to_string(), 0.675, 0.025),
+        ("q".to_string(), 0.025, 0.025),
+        ("q".to_string(), 0.07500000000000001, 0.025),
+        ("r".to_string(), 0.32500000000000007, 0.025),
+        ("r".to_string(), 0.37500000000000006, 0.025),
+        ("a".to_string(), 0.07500000000000001, 0.07500000000000001),
+        ("a".to_string(), 0.125, 0.07500000000000001),
+        ("k".to_string(), 0.775, 0.07500000000000001),
+        ("k".to_string(), 0.8250000000000001, 0.07500000000000001),
+        ("j".to_string(), 0.675, 0.07500000000000001),
+        ("j".to_string(), 0.7250000000000001, 0.07500000000000001),
+        ("l".to_string(), 0.8750000000000001, 0.07500000000000001),
+        ("l".to_string(), 0.925, 0.07500000000000001),
+        ("s".to_string(), 0.17500000000000002, 0.07500000000000001),
+        ("s".to_string(), 0.225, 0.07500000000000001),
+        ("n".to_string(), 0.6250000000000001, 0.125),
+        ("n".to_string(), 0.675, 0.125),
+        ("t".to_string(), 0.42500000000000004, 0.025),
+        ("t".to_string(), 0.47500000000000003, 0.025),
+        ("g".to_string(), 0.47500000000000003, 0.07500000000000001),
+        ("g".to_string(), 0.525, 0.07500000000000001),
+        ("b".to_string(), 0.525, 0.125),
+        ("b".to_string(), 0.5750000000000001, 0.125),
+        ("e".to_string(), 0.225, 0.025),
+        ("e".to_string(), 0.275, 0.025),
+        ("z".to_string(), 0.125, 0.125),
+        ("z".to_string(), 0.17500000000000002, 0.125),
+        ("x".to_string(), 0.225, 0.125),
+        ("x".to_string(), 0.275, 0.125),
+        ("o".to_string(), 0.8250000000000001, 0.025),
+        ("o".to_string(), 0.8750000000000001, 0.025),
+        ("p".to_string(), 0.925, 0.025),
+        ("p".to_string(), 0.9750000000000001, 0.025),
+        /*
+
+               (".".to_string(), 0.7250000000000001, 0.17500000000000002),
+               (".".to_string(), 0.775, 0.17500000000000002),
+        (
+                   "Return".to_string(),
+                   0.8250000000000001,
+                   0.17500000000000002,
+               ),
+               (
+                   "Return".to_string(),
+                   0.8750000000000001,
+                   0.17500000000000002,
+               ),
+               ("Return".to_string(), 0.925, 0.17500000000000002),
+               (
+                   "Return".to_string(),
+                   0.9750000000000001,
+                   0.17500000000000002,
+               ),
+
+               ("Shift_L_base".to_string(), 0.025, 0.125),
+               ("Shift_L_base".to_string(), 0.07500000000000001, 0.125),
+               ("show_numbers".to_string(), 0.025, 0.17500000000000002),
+               (
+                   "show_numbers".to_string(),
+                   0.07500000000000001,
+                   0.17500000000000002,
+               ),
+               (":)".to_string(), 0.225, 0.17500000000000002),
+               (":)".to_string(), 0.275, 0.17500000000000002),
+               ("BackSpace".to_string(), 0.8250000000000001, 0.125),
+               ("BackSpace".to_string(), 0.8750000000000001, 0.125),
+               ("BackSpace".to_string(), 0.925, 0.125),
+               ("BackSpace".to_string(), 0.9750000000000001, 0.125),
+               (
+                   "space".to_string(),
+                   0.32500000000000007,
+                   0.17500000000000002,
+               ),
+               (
+                   "space".to_string(),
+                   0.37500000000000006,
+                   0.17500000000000002,
+               ),
+               (
+                   "space".to_string(),
+                   0.42500000000000004,
+                   0.17500000000000002,
+               ),
+               (
+                   "space".to_string(),
+                   0.47500000000000003,
+                   0.17500000000000002,
+               ),
+               ("space".to_string(), 0.525, 0.17500000000000002),
+               ("space".to_string(), 0.5750000000000001, 0.17500000000000002),
+               ("space".to_string(), 0.6250000000000001, 0.17500000000000002),
+               ("space".to_string(), 0.675, 0.17500000000000002),
+               ("GBA".to_string(), 0.125, 0.17500000000000002),
+               ("GBA".to_string(), 0.17500000000000002, 0.17500000000000002),*/
+    ]
 }
