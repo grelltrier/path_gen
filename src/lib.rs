@@ -178,32 +178,32 @@ fn dist(start: &(f64, f64), end: &(f64, f64)) -> f64 {
 
 pub fn get_default_buttons_centers() -> HashMap<String, (f64, f64)> {
     let mut buttons = HashMap::new();
-    buttons.insert("h".to_string(), (0.600, 0.075));
-    buttons.insert("p".to_string(), (0.950, 0.025));
-    buttons.insert("q".to_string(), (0.050, 0.025));
-    buttons.insert("d".to_string(), (0.300, 0.075));
-    buttons.insert("x".to_string(), (0.250, 0.125));
-    buttons.insert("s".to_string(), (0.200, 0.075));
-    buttons.insert("y".to_string(), (0.550, 0.025));
-    buttons.insert("i".to_string(), (0.750, 0.025));
-    buttons.insert("j".to_string(), (0.700, 0.075));
-    buttons.insert("w".to_string(), (0.150, 0.025));
-    buttons.insert("e".to_string(), (0.250, 0.025));
-    buttons.insert("c".to_string(), (0.350, 0.125));
-    buttons.insert("m".to_string(), (0.750, 0.125));
-    buttons.insert("k".to_string(), (0.800, 0.075));
-    buttons.insert("a".to_string(), (0.100, 0.075));
-    buttons.insert("o".to_string(), (0.850, 0.025));
-    buttons.insert("t".to_string(), (0.450, 0.025));
-    buttons.insert("z".to_string(), (0.150, 0.125));
-    buttons.insert("b".to_string(), (0.550, 0.125));
-    buttons.insert("g".to_string(), (0.500, 0.075));
-    buttons.insert("r".to_string(), (0.350, 0.025));
-    buttons.insert("l".to_string(), (0.900, 0.075));
-    buttons.insert("f".to_string(), (0.400, 0.075));
-    buttons.insert("n".to_string(), (0.650, 0.125));
-    buttons.insert("v".to_string(), (0.450, 0.125));
-    buttons.insert("u".to_string(), (0.650, 0.025));
+    buttons.insert("h".to_string(), (0.600, 0.15));
+    buttons.insert("p".to_string(), (0.950, 0.05));
+    buttons.insert("q".to_string(), (0.050, 0.05));
+    buttons.insert("d".to_string(), (0.300, 0.15));
+    buttons.insert("x".to_string(), (0.250, 0.25));
+    buttons.insert("s".to_string(), (0.200, 0.15));
+    buttons.insert("y".to_string(), (0.550, 0.05));
+    buttons.insert("i".to_string(), (0.750, 0.05));
+    buttons.insert("j".to_string(), (0.700, 0.15));
+    buttons.insert("w".to_string(), (0.150, 0.05));
+    buttons.insert("e".to_string(), (0.250, 0.05));
+    buttons.insert("c".to_string(), (0.350, 0.25));
+    buttons.insert("m".to_string(), (0.750, 0.25));
+    buttons.insert("k".to_string(), (0.800, 0.15));
+    buttons.insert("a".to_string(), (0.100, 0.15));
+    buttons.insert("o".to_string(), (0.850, 0.05));
+    buttons.insert("t".to_string(), (0.450, 0.05));
+    buttons.insert("z".to_string(), (0.150, 0.25));
+    buttons.insert("b".to_string(), (0.550, 0.25));
+    buttons.insert("g".to_string(), (0.500, 0.15));
+    buttons.insert("r".to_string(), (0.350, 0.05));
+    buttons.insert("l".to_string(), (0.900, 0.15));
+    buttons.insert("f".to_string(), (0.400, 0.15));
+    buttons.insert("n".to_string(), (0.650, 0.25));
+    buttons.insert("v".to_string(), (0.450, 0.25));
+    buttons.insert("u".to_string(), (0.650, 0.05));
 
     buttons
 }
