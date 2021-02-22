@@ -70,7 +70,7 @@ impl<'a> WordPath<'a> {
         &self,
         waypoints: Vec<(f64, f64)>,
         path_length: f64,
-    ) -> Option<Vec<(f64, f64)>> {
+    ) -> Option<(Vec<(f64, f64)>, f64)> {
         // If there are no waypoints, we can't construct a path
         // This can only happen for an empty string (which should never occur)
         // If there are more waypoints than the number of requested points, we also cannot construct a path
@@ -81,7 +81,7 @@ impl<'a> WordPath<'a> {
         if path_length < 0.00000001 {
             //println!("The waypoints are all the same!");
             //println!("Replaced them with just the first point");
-            return Some(vec![waypoints[0]; self.no_points]);
+            return Some((vec![waypoints[0]; self.no_points], path_length));
         }
 
         // Interpolate the points of the path
@@ -117,10 +117,10 @@ impl<'a> WordPath<'a> {
                 }
             }
         }
-        Some(path)
+        Some((path, path_length))
     }
 
-    pub fn get_path(&self) -> Option<Vec<(f64, f64)>> {
+    pub fn get_path(&self) -> Option<(Vec<(f64, f64)>, f64)> {
         // Get waypoints
         let ideal_path = self.ideal_waypoints();
         // Interpolate the path
