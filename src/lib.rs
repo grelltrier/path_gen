@@ -54,7 +54,6 @@ impl<'a> WordPath<'a> {
                 prev_point = Some((x, y));
                 points.push((x, y));
             } else {
-                //println!("No key found for letter {}, NO PATH POSSIBLE", letter);
                 return None;
             }
         }
@@ -73,20 +72,16 @@ impl<'a> WordPath<'a> {
             return None;
         }
 
-        // If there is only one waypoint, we can also not construct intermediate points
+        // If there is only one waypoint, we also cannot construct intermediate points
         if waypoints.len() == 1 {
             return Some(vec![waypoints[0]; 1]);
         }
 
-        // Interpolate the points of the path
         let mut leg_dist;
         let mut delta_x;
         let mut delta_y;
 
-        //let point_dist = path_length / (no_points - 1) as f64;
-        let point_dist = desired_point_density;
         let mut remainder = 0.0;
-
         let mut path: Vec<(f64, f64)> = Vec::new();
         let mut waypoints_iter = waypoints.iter().peekable();
         let mut no_leg_sections;
@@ -95,7 +90,7 @@ impl<'a> WordPath<'a> {
             path.push(*start_point);
             if let Some(&end_point) = waypoints_iter.peek() {
                 leg_dist = dist(start_point, end_point);
-                no_leg_sections = leg_dist / point_dist + remainder;
+                no_leg_sections = leg_dist / desired_point_density + remainder;
                 remainder = no_leg_sections.fract();
                 no_leg_sections = no_leg_sections.trunc();
 
