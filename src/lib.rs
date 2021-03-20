@@ -60,7 +60,7 @@ impl<'a> WordPath<'a> {
         Some((points, total_length))
     }
 
-    pub fn ideal_path_interpolated(
+    fn ideal_path_interpolated(
         &self,
         waypoints: Vec<(f64, f64)>,
         desired_point_density: f64,
