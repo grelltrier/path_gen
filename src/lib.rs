@@ -1,6 +1,9 @@
 use std::collections::HashMap;
 use std::vec::Vec;
 
+#[cfg(test)]
+mod tests;
+
 pub struct WordPath<'a> {
     word: Vec<char>,
     key_layout: &'a HashMap<String, (f64, f64)>,
@@ -28,7 +31,7 @@ impl<'a> WordPath<'a> {
         };
 
         // Look up the coordinate of the last key
-        let coordinate_last_key = if self.word.len() > 1 {
+        let coordinate_last_key = if self.word.len() > 0 {
             let last_char = self.word[self.word.len() - 1];
             self.key_layout.get(&last_char.to_string())
         } else {
