@@ -7,6 +7,7 @@ pub struct WordPath<'a> {
 }
 
 impl<'a> WordPath<'a> {
+    /// Create a new WordPath struct
     pub fn new(key_layout: &'a HashMap<String, (f64, f64)>, word: &str) -> Self {
         let mut word: Vec<char> = word.chars().collect();
         word.dedup();
@@ -16,7 +17,9 @@ impl<'a> WordPath<'a> {
         Self { word, key_layout }
     }
 
+    /// Get the first and the last points of the path
     pub fn get_first_last_points(&self) -> (Option<&(f64, f64)>, Option<&(f64, f64)>) {
+        // Look up the coordinate of the first key
         let coordinate_first_key = if self.word.len() > 0 {
             let first_char = self.word[0];
             self.key_layout.get(&first_char.to_string())
@@ -24,6 +27,7 @@ impl<'a> WordPath<'a> {
             None
         };
 
+        // Look up the coordinate of the last key
         let coordinate_last_key = if self.word.len() > 1 {
             let last_char = self.word[self.word.len() - 1];
             self.key_layout.get(&last_char.to_string())
@@ -60,6 +64,7 @@ impl<'a> WordPath<'a> {
         Some((points, total_length))
     }
 
+    /// Calculate additional points in-between the waypoints
     fn ideal_path_interpolated(
         &self,
         waypoints: Vec<(f64, f64)>,
@@ -110,6 +115,7 @@ impl<'a> WordPath<'a> {
         Some(path)
     }
 
+    /// Get the ideal path representing a word
     pub fn get_path(&self, desired_point_density: f64) -> Option<Vec<(f64, f64)>> {
         // Get waypoints
         let ideal_path = self.ideal_waypoints();
@@ -144,7 +150,6 @@ pub fn get_button_centers() -> HashMap<std::string::String, (f64, f64)> {
         buttons_coordinates_normalized.insert(button_id.to_string(), (button_x, button_y));
     }
     for (button_name, (x, y)) in buttons_coordinates_normalized.iter() {
-        //buttons.push((".".to_string(), 0.775, 0.875));
         println!(
             "buttons.push((\"{}\".to_string(), {:.3}, {:.3}));",
             button_name, x, y,
