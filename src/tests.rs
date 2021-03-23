@@ -25,6 +25,39 @@ fn test_negative_point_density() {
 }
 
 #[test]
+fn test_no_path_possible() {
+    let word = "ÜÜÜÜÜÜ";
+    let key_layout = get_default_buttons_centers();
+    let word_path = WordPath::new(&key_layout, word);
+
+    // Check first and last points
+    let (first_word, last_word) = word_path.get_first_last_points();
+    assert!(first_word.is_none() && last_word.is_none());
+
+    // Check the interpolated path
+    assert!(word_path.get_path(-0.1).is_none());
+}
+
+#[test]
+fn test_no_path_possible_but_first_last_valid() {
+    let word = "hÜÜÜÜo";
+    let key_layout = get_default_buttons_centers();
+    let word_path = WordPath::new(&key_layout, word);
+
+    // Check first and last points
+    if let (Some(&(first_x, first_y)), Some(&(last_x, last_y))) = word_path.get_first_last_points()
+    {
+        assert!(float_cmp(first_x, 0.600) && float_cmp(first_y, 0.15));
+        assert!(float_cmp(last_x, 0.850) && float_cmp(last_y, 0.05));
+    } else {
+        panic!()
+    }
+
+    // Check the interpolated path
+    assert!(word_path.get_path(-0.1).is_none());
+}
+
+#[test]
 fn test_word_i() {
     let word = "I";
     println!("Path for '{}':", word);
@@ -101,6 +134,36 @@ fn test_word_hello() {
         }
     } else {
         panic!();
+    }
+}
+
+#[test]
+fn test_lowercasing() {
+    let key_layout = get_default_buttons_centers();
+
+    let word = "hello";
+    let word_a = "HeLLo";
+    let word_b = "HELLO";
+    let word_c = "hELlO";
+
+    let word_path = WordPath::new(&key_layout, word);
+    let word_path_a = WordPath::new(&key_layout, word_a);
+    let word_path_b = WordPath::new(&key_layout, word_b);
+    let word_path_c = WordPath::new(&key_layout, word_c);
+    let word_paths_cased = vec![word_path_a, word_path_b, word_path_c];
+
+    // Check the first and last points
+    let (first_point, last_point) = word_path.get_first_last_points();
+    for cased_word in &word_paths_cased {
+        let (first_point_cased, last_point_cased) = cased_word.get_first_last_points();
+        assert!(first_point == first_point_cased && last_point == last_point_cased);
+    }
+
+    // Check the interpolated path
+    let ideal_path = word_path.get_path(0.1);
+    for cased_word in &word_paths_cased {
+        let path_cased = cased_word.get_path(0.1);
+        assert!(ideal_path == path_cased);
     }
 }
 
