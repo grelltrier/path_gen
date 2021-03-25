@@ -75,8 +75,8 @@ impl<'a> WordPath<'a> {
     ) -> Option<Vec<(f64, f64)>> {
         // If there are no waypoints, we can't construct a path
         // This can only happen for an empty string (which should never occur)
-        // If the requested desired_point_density is negative or zero, we also can not construct a valid path
-        if waypoints.len() == 0 || desired_point_density <= 0.0 {
+        // If the requested desired_point_density is negative, we also can not construct a valid path
+        if waypoints.len() == 0 || desired_point_density < 0.0 {
             return None;
         }
 
