@@ -5,6 +5,7 @@ fn float_cmp(a: f64, b: f64) -> bool {
 }
 
 #[test]
+// Test case B1
 fn test_empty_word() {
     let word = "";
     let key_layout = get_default_buttons_centers();
@@ -15,6 +16,7 @@ fn test_empty_word() {
 }
 
 #[test]
+// Test case B2
 fn test_negative_point_density() {
     let word = "I";
     let key_layout = get_default_buttons_centers();
@@ -25,6 +27,7 @@ fn test_negative_point_density() {
 }
 
 #[test]
+// Test case B3
 fn test_no_path_possible() {
     let word = "ÜÜÜÜÜÜ";
     let key_layout = get_default_buttons_centers();
@@ -39,6 +42,7 @@ fn test_no_path_possible() {
 }
 
 #[test]
+// Test case B4
 fn test_no_path_possible_but_first_last_valid() {
     let word = "hÜÜÜÜo";
     let key_layout = get_default_buttons_centers();
@@ -58,6 +62,7 @@ fn test_no_path_possible_but_first_last_valid() {
 }
 
 #[test]
+// Test case B5
 fn test_word_i() {
     let word = "I";
     println!("Path for '{}':", word);
@@ -91,6 +96,7 @@ fn test_word_i() {
 }
 
 #[test]
+// Test case B6
 fn test_word_hello() {
     let word = "hello";
     println!("Path for '{}':", word);
@@ -138,6 +144,7 @@ fn test_word_hello() {
 }
 
 #[test]
+// Test case B7
 fn test_lowercasing() {
     let key_layout = get_default_buttons_centers();
 
@@ -168,6 +175,7 @@ fn test_lowercasing() {
 }
 
 #[test]
+// Test case B8
 fn test_word_hello_dense() {
     let word = "hello";
     println!("Path for '{}':", word);
@@ -317,6 +325,7 @@ fn test_word_hello_dense() {
 }
 
 #[test]
+// Test case B9
 fn test_word_spaceship() {
     let word = "spaceship";
     println!("Path for '{}':", word);
