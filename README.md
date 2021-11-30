@@ -3,4 +3,4 @@
 
 # Path_gen
 
-This crate provides functionality to calculate a path between waypoints. Currently it only connects them with a straight line and calculates additional points in-between
+This crate provides functionality to calculate a path between waypoints. Currently it only connects them with a straight line and calculates additional points in-between.
